@@ -1,3 +1,59 @@
+<!-- <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit User</title>
+  </head>
+  <body>
+    <form action="/post-edit-user" method="POST">
+      <div>Edit User</div>
+      <div>
+        <label for="first-name">First Name</label>
+        <input
+          type="text"
+          name="firstName"
+          id="first-name"
+          value="<%#= dataUser.firstName %>"
+        />
+      </div>
+      <div>
+        <label for="last-name">Last Name</label>
+        <input
+          type="text"
+          name="lastName"
+          id="last-name"
+          value="<%#= dataUser.lastName %>"
+        />
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          value="<%#= dataUser.email %>"
+        />
+      </div>
+      <div>
+        <label for="address">Address</label>
+        <input
+          type="text"
+          name="address"
+          id="address"
+          value="<%#= dataUser.address %>"
+        />
+      </div>
+      <input type="text" name="userID" value="<%#= dataUser.userID %>" hidden />
+      <div>
+        <input type="submit" value="submit" />
+      </div>
+    </form>
+  </body>
+</html> -->
+
+<!--  -->
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -30,7 +86,7 @@
       </div>
     </div>
 
-    <!-- <%= dataUser %> -->
+    <!-- <%#= dataUser %> -->
 
     <div class="py-5 h-fit px-10 overflow-auto rounded-lg">
       <table class="w-full">
@@ -86,7 +142,7 @@
                 value="Detail"
               /> -->
               <form
-                action="/get-edit-user/<%= dataUser[i].userID %>"
+                action="/get-edit-user/<%#= dataUser[i].userID %>"
                 method="GET"
               >
                 <input
@@ -99,7 +155,7 @@
                 <input
                   type="text"
                   name="userID"
-                  value="<%= dataUser[i].userID %>"
+                  value="<%#= dataUser[i].userID %>"
                   hidden
                 />
                 <input
@@ -117,18 +173,20 @@
     </div>
 
     <!-- modal container create a new user -->
+
+    <!-- modal container edit user -->
     <div
-      class="modal-container-create-user h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-50 hidden"
+      class="modal-container-edit-user h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-50"
     >
       <div
-        class="modal-create-user bg-slate-100 rounded-lg border border-slate-300 shadow-2xl"
+        class="modal-edit-user bg-slate-100 rounded-lg border border-slate-300 shadow-2xl"
       >
-        <form action="/create-new-user" method="POST">
+        <form action="/post-edit-user" method="POST">
           <div class="flex justify-between items-center">
-            <div class="ml-4 text-3xl">Create a new user</div>
+            <div class="ml-4 text-3xl">Edit user</div>
             <button
               type="button"
-              class="close-modal-create-user text-red-400 text-xl m-4 hover:text-red-700"
+              class="close-modal-edit-user text-red-400 text-xl m-4 hover:text-red-700"
             >
               &cross;
             </button>
@@ -142,6 +200,7 @@
                   type="text"
                   name="firstName"
                   id="first-name"
+                  value="<%= dataUserSelected.firstName %>"
                   placeholder="First Name"
                   size="12"
                 />
@@ -153,6 +212,7 @@
                   type="text"
                   name="lastName"
                   id="last-name"
+                  value="<%= dataUserSelected.lastName %>"
                   placeholder="Last Name"
                   size="12"
                 />
@@ -165,6 +225,7 @@
                 type="email"
                 name="email"
                 id="email"
+                value="<%= dataUserSelected.email %>"
                 placeholder="Email"
                 size="36"
               />
@@ -176,15 +237,21 @@
                 type="text"
                 name="address"
                 id="address"
+                value="<%= dataUserSelected.address %>"
                 placeholder="Address"
                 size="36"
               />
             </div>
           </div>
-
+          <input
+            type="text"
+            name="userID"
+            value="<%= dataUserSelected.userID %>"
+            hidden
+          />
           <div class="flex justify-center items-center m-3">
             <input
-              class="btn-create-user bg-cyan-300 rounded-lg px-5 py-3 text-lg cursor-pointer hover:bg-cyan-400 border border-slate-300"
+              class="btn-edit-user bg-cyan-300 rounded-lg px-5 py-3 text-lg cursor-pointer hover:bg-cyan-400 border border-slate-300"
               type="submit"
               value="Submit"
             />

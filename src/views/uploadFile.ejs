@@ -1,0 +1,65 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRUD Website</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <nav>
+      <div class="flex justify-center p-4 bg-gray-700 text-xl">
+        <a class="px-3 text-white hover:text-cyan-500" href="/">Home</a>
+        <a class="px-3 text-cyan-500" href="/upload-file">Upload File</a>
+      </div>
+    </nav>
+    <h2 class="text-5xl py-2 text-cyan-500 font-medium text-center">
+      Upload File
+    </h2>
+    <!-- upload single file -->
+    <div class="flex justify-evenly py-5">
+      <form
+        action="/upload-single-file"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div>
+          <div class="text-xl mb-5">Select single file</div>
+          <input class="mb-5" type="file" name="single-file-input" />
+        </div>
+        <div>
+          <input
+            class="btn-create-user bg-cyan-300 rounded-lg px-3 py-1 text-lg cursor-pointer hover:bg-cyan-400 border border-slate-300"
+            type="submit"
+            name="btn-upload-single-file"
+            value="Upload"
+          />
+        </div>
+      </form>
+      <!-- upload multiple files -->
+      <form
+        action="/upload-multiple-files"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div>
+          <div class="text-xl mb-5">Select multiple files</div>
+          <input
+            class="mb-5"
+            type="file"
+            name="multiple-files-input"
+            multiple
+          />
+        </div>
+        <div>
+          <input
+            class="btn-create-user bg-cyan-300 rounded-lg px-3 py-1 text-lg cursor-pointer hover:bg-cyan-400 border border-slate-300"
+            type="submit"
+            name="btn-upload-multiple-files"
+            value="Upload"
+          />
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

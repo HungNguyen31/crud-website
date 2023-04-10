@@ -13,7 +13,7 @@ import mysqlPromise from "mysql2/promise";
 const pool = mysqlPromise.createPool({
   host: "localhost",
   user: "root",
-  database: "testdb",
+  database: "cruddb",
   // password: "password",
 });
 
