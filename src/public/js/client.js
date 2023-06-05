@@ -30,6 +30,24 @@ if (closeModalCreateUser) {
 //   e.stopPropagation();
 // });
 
+//Test
+// const modalContainerTest = document.querySelector(".modal-container-test");
+
+// const showModalTestList = document.querySelectorAll(".show-modal-test");
+// const closeModalTest = document.querySelector(".close-modal-test");
+
+// for (const showModalTest of showModalTestList) {
+//   showModalTest.addEventListener("click", function () {
+//     modalContainerTest.classList.remove("hidden");
+//   });
+// }
+
+// if (closeModalTest) {
+//   closeModalTest.addEventListener("click", function () {
+//     modalContainerTest.classList.add("hidden");
+//   });
+// }
+
 //HANDLE EDIT USER MODAL CONTAINER
 
 const modalContainerEditUser = document.querySelector(
@@ -114,4 +132,88 @@ if (btnEditUser) {
         break;
     }
   });
+}
+
+const inpSearch = document.querySelector(".inp-search");
+// const btnSearch = document.querySelector(".btn-search");
+
+// if (inpSearch) {
+//   btnSearch.addEventListener("click", function filterProducts(e) {
+//     let searchValue = removeAccents(inpSearch.value.toUpperCase());
+//     let users = document.querySelectorAll(".user");
+
+//     for (let i = 0; i < users.length; i++) {
+//       let userID = users[i].querySelector(".user-id");
+//       let firstName = users[i].querySelector(".first-name");
+//       let lastName = users[i].querySelector(".last-name");
+//       let email = users[i].querySelector(".email");
+//       let address = users[i].querySelector(".address");
+
+//       if (
+//         removeAccents(userID.innerHTML).toUpperCase().indexOf(searchValue) >
+//           -1 ||
+//         removeAccents(firstName.innerHTML).toUpperCase().indexOf(searchValue) >
+//           -1 ||
+//         removeAccents(lastName.innerHTML).toUpperCase().indexOf(searchValue) >
+//           -1 ||
+//         removeAccents(email.innerHTML).toUpperCase().indexOf(searchValue) >
+//           -1 ||
+//         removeAccents(address.innerHTML).toUpperCase().indexOf(searchValue) > -1
+//       ) {
+//         users[i].classList.remove("hidden");
+//       } else {
+//         users[i].classList.add("hidden");
+//       }
+//     }
+//   });
+//   inpSearch.addEventListener("keypress", function filterProducts(e) {
+//     if (e.key === "Enter") {
+//       e.preventDefault();
+//       btnSearch.click();
+//     }
+//   });
+// }
+
+if (inpSearch) {
+  inpSearch.addEventListener("keypress", function filterProducts(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      let searchValue = removeAccents(inpSearch.value.toUpperCase());
+      let users = document.querySelectorAll(".user");
+
+      for (let i = 0; i < users.length; i++) {
+        let userID = users[i].querySelector(".user-id");
+        let firstName = users[i].querySelector(".first-name");
+        let lastName = users[i].querySelector(".last-name");
+        let email = users[i].querySelector(".email");
+        let address = users[i].querySelector(".address");
+
+        if (
+          removeAccents(userID.innerHTML).toUpperCase().indexOf(searchValue) >
+            -1 ||
+          removeAccents(firstName.innerHTML)
+            .toUpperCase()
+            .indexOf(searchValue) > -1 ||
+          removeAccents(lastName.innerHTML).toUpperCase().indexOf(searchValue) >
+            -1 ||
+          removeAccents(email.innerHTML).toUpperCase().indexOf(searchValue) >
+            -1 ||
+          removeAccents(address.innerHTML).toUpperCase().indexOf(searchValue) >
+            -1
+        ) {
+          users[i].classList.remove("hidden");
+        } else {
+          users[i].classList.add("hidden");
+        }
+      }
+    }
+  });
+}
+
+function removeAccents(str) {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D");
 }

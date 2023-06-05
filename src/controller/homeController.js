@@ -1,6 +1,9 @@
-import { json } from "body-parser";
+import bodyParser from "body-parser";
+import connection from "../configs/connectDB";
 import pool from "../configs/connectDB";
 import multer from "multer";
+import bcryct from "bcrypt";
+import { createTokens } from "./JWTController";
 
 let getHomepage = async (req, res) => {
   // simple query
@@ -17,6 +20,7 @@ let getHomepage = async (req, res) => {
   const [rows, fields] = await pool.execute("SELECT * FROM users");
   return res.render("index.ejs", {
     dataUser: rows,
+    dataUserSelected: {},
   });
 };
 
@@ -31,6 +35,7 @@ let getDetailPage = async (req, res) => {
 
 let createNewUser = async (req, res) => {
   let { firstName, lastName, email, address } = req.body;
+  await pool.execute("ALTER TABLE users AUTO_INCREMENT = 1");
   await pool.execute(
     "INSERT INTO users (firstName, lastName, email, address) VALUES (?, ?, ?, ?)",
     [firstName, lastName, email, address]
@@ -67,7 +72,7 @@ let postEditUser = async (req, res) => {
   return res.redirect("/");
 };
 
-let getUploadFilePage = async (req, res) => {
+let getUploadFilePage = (req, res) => {
   return res.render("uploadFile.ejs");
 };
 
@@ -118,6 +123,79 @@ let handleUploadMultipleFiles = async (req, res) => {
   });
 };
 
+let getLoginPage = async (req, res) => {
+  return res.render("login.ejs");
+};
+
+let registerUser = async (req, res) => {
+  const { userName, password } = req.body;
+
+  var datetime =
+    new Date().toISOString().slice(0, 10) +
+    " " +
+    new Date().toLocaleTimeString("en-GB");
+
+  await pool.execute("ALTER TABLE users_acc AUTO_INCREMENT = 1");
+
+  await bcryct.hash(password, 10).then((hash) => {
+    // pool.users_acc
+    //   .create({
+    //     userName: userName,
+    //     password: hash,
+    //   })
+
+    pool
+      .execute(
+        "INSERT INTO users_acc (userName, password, createdAt, updatedAt) VALUES (?, ?, ?, ?)",
+        [userName, hash, datetime, datetime]
+        // "ALTER TABLE users_acc AUTO_INCREMENT = 1"
+      )
+      .then(() => {
+        res.json("USER REGISTERED");
+      })
+      .catch((err) => {
+        if (err) {
+          res.status(400).json({ error: err });
+        }
+      });
+  });
+};
+let loginUser = async (req, res) => {
+  const { userName, password } = req.body;
+
+  const user = await pool.execute(
+    "SELECT * FROM users_acc WHERE userName = ?",
+    [userName]
+  );
+
+  // console.log(user[0][0].password);
+
+  if (Object.keys(user[0]).length === 0) {
+    res.status(400).json({ error: "User Doesn't Exist" });
+  } else {
+    const dbPassword = user[0][0].password;
+
+    bcryct.compare(password, dbPassword).then((match) => {
+      if (!match) {
+        res
+          .status(400)
+          .json({ error: "Wrong Username and Password Combination!" });
+      } else {
+        const accessToken = createTokens(user);
+        res.cookie("access-token", accessToken, {
+          maxAge: 60 * 60 * 24 * 30 * 1000,
+          httpOnly: true,
+        });
+        res.json("Logged In");
+      }
+    });
+  }
+};
+
+let getProfile = (req, res) => {
+  res.json("profile");
+};
+
 module.exports = {
   getHomepage,
   getDetailPage,
@@ -128,4 +206,8 @@ module.exports = {
   getUploadFilePage,
   handleUploadSingleFile,
   handleUploadMultipleFiles,
+  getLoginPage,
+  registerUser,
+  loginUser,
+  getProfile,
 };

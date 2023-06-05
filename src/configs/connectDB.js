@@ -13,8 +13,8 @@ import mysqlPromise from "mysql2/promise";
 const pool = mysqlPromise.createPool({
   host: "localhost",
   user: "root",
-  database: "cruddb",
-  // password: "password",
+  database: "crud",
+  password: "hungpro9x",
 });
 
 // export default connection;

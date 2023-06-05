@@ -1,0 +1,69 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRUD Website</title>
+    <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" /> -->
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <nav>
+      <div class="flex justify-center p-4 bg-gray-700 text-xl">
+        <a class="px-3 text-white hover:text-cyan-500" href="/">Home</a>
+        <a class="px-3 text-white hover:text-cyan-500" href="/upload-file"
+          >Upload File</a
+        >
+        <a class="px-3 text-cyan-500" href="/login">Login</a>
+      </div>
+    </nav>
+
+    <div
+      class="h-[calc(100%-4rem)] w-full flex justify-center items-center bg-black bg-opacity-10"
+    >
+      <div
+        class="-mt-36 pt-5 bg-white rounded-lg border border-slate-300 shadow-2xl"
+      >
+        <form action="/create-new-user" method="POST">
+          <div class="flex justify-center items-center">
+            <div class="text-3xl">Login to website</div>
+          </div>
+          <div class="mx-16 my-5">
+            <div class="mt-3">
+              <!-- <label for="email">Email</label> -->
+              <input
+                class="border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-base"
+                type="text"
+                name="userName"
+                id="userName"
+                placeholder="Username"
+                size="36"
+              />
+            </div>
+            <div class="mt-3">
+              <!-- <label for="address">Address</label> -->
+              <input
+                class="border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-1 sm:text-base"
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
+                size="36"
+              />
+            </div>
+          </div>
+
+          <div class="flex justify-center items-center m-3">
+            <input
+              class="btn-create-user bg-cyan-300 rounded-lg px-5 py-3 text-lg cursor-pointer hover:bg-cyan-400 border border-slate-300"
+              type="submit"
+              value="Submit"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/js/client.js"></script>
+  </body>
+</html>

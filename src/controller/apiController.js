@@ -15,6 +15,7 @@ let createNewUser = async (req, res) => {
       message: "missing required params",
     });
   }
+  await pool.execute("ALTER TABLE users AUTO_INCREMENT = 1");
   await pool.execute(
     "INSERT INTO users (firstName, lastName, email, address) VALUES (?, ?, ?, ?)",
     [firstName, lastName, email, address]

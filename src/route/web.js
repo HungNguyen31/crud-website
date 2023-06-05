@@ -3,6 +3,7 @@ import homeController from "../controller/homeController";
 import multer from "multer";
 import path from "path";
 import appRoot from "app-root-path";
+import { validateToken } from "../controller/JWTController";
 // var appRoot = require("app-root-path");
 
 let router = express.Router();
@@ -45,6 +46,10 @@ const initWebRoute = (app) => {
   router.get("/get-edit-user/:userID", homeController.getEditUser);
   router.post("/post-edit-user", homeController.postEditUser);
   router.get("/upload-file", homeController.getUploadFilePage);
+  router.get("/login", homeController.getLoginPage);
+  router.get("/profile", validateToken, homeController.getProfile);
+  router.post("/register", homeController.registerUser);
+  router.post("/login", homeController.loginUser);
   router.post(
     "/upload-single-file",
     upload.single("single-file-input"),
@@ -71,7 +76,7 @@ const initWebRoute = (app) => {
   );
 
   router.get("/about", (req, res) => {
-    res.send("hungdeptraivl");
+    res.send("hungdeptrai");
   });
 
   return app.use("/", router);
