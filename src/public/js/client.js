@@ -7,9 +7,11 @@ const modalContainerCreateUser = document.querySelector(
 const showModalCreateUser = document.querySelector(".show-modal-create-user");
 const closeModalCreateUser = document.querySelector(".close-modal-create-user");
 
-showModalCreateUser.addEventListener("click", function () {
-  modalContainerCreateUser.classList.remove("hidden");
-});
+if (showModalCreateUser) {
+  showModalCreateUser.addEventListener("click", function () {
+    modalContainerCreateUser.classList.remove("hidden");
+  });
+}
 
 if (closeModalCreateUser) {
   closeModalCreateUser.addEventListener("click", function () {
@@ -57,9 +59,11 @@ const modalContainerEditUser = document.querySelector(
 const showModalEditUser = document.querySelector(".show-modal-edit-user");
 const closeModalEditUser = document.querySelector(".close-modal-edit-user");
 
-showModalEditUser.addEventListener("click", function () {
-  modalContainerEditUser.classList.remove("hidden");
-});
+if (showModalEditUser) {
+  showModalEditUser.addEventListener("click", function () {
+    modalContainerEditUser.classList.remove("hidden");
+  });
+}
 
 if (closeModalEditUser) {
   closeModalEditUser.addEventListener("click", function () {
@@ -209,6 +213,86 @@ if (inpSearch) {
     }
   });
 }
+
+//Handle Login, Register, Logout
+const btnLogin = document.querySelector(".btn-login");
+const btnRegister = document.querySelector(".btn-register");
+
+if (btnLogin) {
+  btnLogin.addEventListener("click", (e) => {
+    const userName = document.getElementById("username-login").value;
+    const password = document.getElementById("password-login").value;
+    let caseType;
+
+    if (!userName) {
+      caseType = 0;
+    } else if (!password) {
+      caseType = 1;
+    }
+    switch (caseType) {
+      case 0:
+        alert("Username can't be empty!");
+        e.preventDefault();
+        break;
+      case 1:
+        alert("Password can't be empty!");
+        e.preventDefault();
+        break;
+    }
+  });
+}
+
+if (btnRegister) {
+  btnRegister.addEventListener("click", (e) => {
+    const userName = document.getElementById("username-register").value;
+    const password = document.getElementById("password-register").value;
+    let caseType;
+
+    if (!userName) {
+      caseType = 0;
+    } else if (!password) {
+      caseType = 1;
+    }
+    switch (caseType) {
+      case 0:
+        alert("Username can't be empty!");
+        // e.preventDefault();
+        break;
+      case 1:
+        alert("Password can't be empty!");
+        // e.preventDefault();
+        break;
+    }
+  });
+}
+
+const formLogin = document.querySelector(".form-login");
+const formRegister = document.querySelector(".form-register");
+
+// const btnShowRegisterForm = document.querySelector(".btn-show-register-form");
+// const btnShowLoginrForm = document.querySelector(".btn-show-login-form");
+
+// if (btnShowRegisterForm) {
+//   btnShowRegisterForm.addEventListener("click", function () {
+//     formRegister.classList.remove("hidden");
+//     formLogin.classList.add("hidden");
+//   });
+// }
+
+// if (btnShowLoginrForm) {
+//   btnShowLoginrForm.addEventListener("click", function () {
+//     formLogin.classList.remove("hidden");
+//     formRegister.classList.add("hidden");
+//   });
+// }
+
+// const btnLogout = document.querySelector(".btn-logout");
+// const accessToken = req.cookies["access-token"];
+// if (btnLogout) {
+//   btnLogout.addEventListener("click", (e) => {
+//     alert(accessToken);
+//   });
+// }
 
 function removeAccents(str) {
   return str

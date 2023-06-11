@@ -1,5 +1,5 @@
 import { sign, verify } from "jsonwebtoken";
-require("dotenv").config();
+// require("dotenv").config();
 
 const createTokens = (user) => {
   const accessToken = sign(
@@ -13,7 +13,6 @@ const createTokens = (user) => {
 };
 
 const validateToken = (req, res, next) => {
-  console.log(req);
   const accessToken = req.cookies["access-token"];
   if (!accessToken) {
     return res.status(400).json({ error: "User not Authenticated!" });
@@ -21,7 +20,10 @@ const validateToken = (req, res, next) => {
     try {
       const validToken = verify(accessToken, process.env.JWTSECRET);
       if (validToken) {
-        res.authenticated = true;
+        req.authenticated = true;
+        // console.log(`token ${validToken}`);
+        // console.log(validToken);
+        // console.log(accessToken);
         return next();
       }
     } catch (err) {

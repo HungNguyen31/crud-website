@@ -18,7 +18,7 @@
         <form class="" action="/logout" method="GET">
           <!-- <button class="btn-logout px-3 text-cyan-500" href="">Logout</button> -->
           <input
-            class="btn-logout px-3 text-red-500 cursor-pointer hover:text-red-600"
+            class="btn-logout px-3 text-cyan-500"
             type="submit"
             value="Logout"
           />
@@ -32,7 +32,7 @@
       <div
         class="-mt-36 pt-5 bg-white rounded-lg border border-slate-300 shadow-2xl"
       >
-        <form class="form-login" action="/login" method="POST">
+        <form class="form-login hidden" action="/login" method="POST">
           <div class="flex justify-center items-center">
             <div class="text-3xl">Log in</div>
           </div>
@@ -72,18 +72,15 @@
               value="Log in"
             />
           </div>
-        </form>
-        <form action="/register" method="GET">
           <div class="flex justify-center items-center m-3">
             <input
               class="btn-show-register-form bg-cyan-300 rounded-lg px-3 py-1 text-lg font-medium cursor-pointer hover:bg-cyan-400 border border-slate-300"
-              type="submit"
+              type="button"
               value="Create new account"
             />
           </div>
         </form>
-
-        <form class="form-register hidden" action="/register" method="POST">
+        <form class="form-register" action="/register" method="POST">
           <div class="flex justify-center items-center">
             <div class="text-3xl">Sign up</div>
           </div>
@@ -112,6 +109,10 @@
             </div>
           </div>
 
+          <% if(messages.error) { %>
+          <div class="text-center text-red-600"><%=messages.error %></div>
+          <% } %>
+
           <div class="flex justify-center items-center m-3">
             <input
               class="btn-register bg-cyan-300 rounded-lg px-5 py-3 text-lg font-medium cursor-pointer hover:bg-cyan-400 border border-slate-300"
@@ -119,10 +120,12 @@
               value="Sign up"
             />
           </div>
+        </form>
+        <form action="/login" method="GET">
           <div class="flex justify-center items-center m-3">
             <input
               class="btn-show-login-form bg-cyan-300 rounded-lg px-3 py-1 text-lg font-medium cursor-pointer hover:bg-cyan-400 border border-slate-300"
-              type="button"
+              type="submit"
               value="Back to Log in"
             />
           </div>

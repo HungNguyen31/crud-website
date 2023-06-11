@@ -4,6 +4,7 @@ import pool from "../configs/connectDB";
 import multer from "multer";
 import bcryct from "bcrypt";
 import { createTokens } from "./JWTController";
+import { render } from "ejs";
 
 let getHomepage = async (req, res) => {
   // simple query
@@ -124,76 +125,106 @@ let handleUploadMultipleFiles = async (req, res) => {
 };
 
 let getLoginPage = async (req, res) => {
-  return res.render("login.ejs");
+  return res.render("login.ejs", { messages: req.flash() });
+};
+let getRegisterPage = async (req, res) => {
+  return res.render("register.ejs", { messages: req.flash() });
 };
 
 let registerUser = async (req, res) => {
   const { userName, password } = req.body;
+  if (userName && password) {
+    var datetime =
+      new Date().toISOString().slice(0, 10) +
+      " " +
+      new Date().toLocaleTimeString("en-GB");
 
-  var datetime =
-    new Date().toISOString().slice(0, 10) +
-    " " +
-    new Date().toLocaleTimeString("en-GB");
+    await pool.execute("ALTER TABLE users_acc AUTO_INCREMENT = 1");
 
-  await pool.execute("ALTER TABLE users_acc AUTO_INCREMENT = 1");
+    await bcryct.hash(password, 10).then((hash) => {
+      // pool.users_acc
+      //   .create({
+      //     userName: userName,
+      //     password: hash,
+      //   })
 
-  await bcryct.hash(password, 10).then((hash) => {
-    // pool.users_acc
-    //   .create({
-    //     userName: userName,
-    //     password: hash,
-    //   })
-
-    pool
-      .execute(
-        "INSERT INTO users_acc (userName, password, createdAt, updatedAt) VALUES (?, ?, ?, ?)",
-        [userName, hash, datetime, datetime]
-        // "ALTER TABLE users_acc AUTO_INCREMENT = 1"
-      )
-      .then(() => {
-        res.json("USER REGISTERED");
-      })
-      .catch((err) => {
-        if (err) {
-          res.status(400).json({ error: err });
-        }
-      });
-  });
+      pool
+        .execute(
+          "INSERT INTO users_acc (userName, password, createdAt, updatedAt) VALUES (?, ?, ?, ?)",
+          [userName, hash, datetime, datetime]
+          // "ALTER TABLE users_acc AUTO_INCREMENT = 1"
+        )
+        .then(() => {
+          // res.json("USER REGISTERED");
+          res.redirect("/login");
+        })
+        .catch((err) => {
+          if (err) {
+            if (err.code === "ER_DUP_ENTRY" && err.errno === 1062) {
+              req.flash("error", "User already exists!");
+              res.redirect("/register");
+            } else {
+              req.flash("error", err.message);
+              res.redirect("/register");
+            }
+          }
+          // res.status(400).json({ error: err });
+        });
+    });
+  } else {
+    res.redirect("/register");
+  }
 };
 let loginUser = async (req, res) => {
   const { userName, password } = req.body;
+  if (userName && password) {
+    const user = await pool.execute(
+      "SELECT * FROM users_acc WHERE userName = ?",
+      [userName]
+    );
 
-  const user = await pool.execute(
-    "SELECT * FROM users_acc WHERE userName = ?",
-    [userName]
-  );
+    // console.log(user[0][0].password);
 
-  // console.log(user[0][0].password);
+    if (Object.keys(user[0]).length === 0) {
+      // res.status(400).json({ error: "User Doesn't Exist" });
+      req.flash("error", "User doesn't exist!");
+      res.redirect("/login");
+    } else {
+      const dbPassword = user[0][0].password;
 
-  if (Object.keys(user[0]).length === 0) {
-    res.status(400).json({ error: "User Doesn't Exist" });
+      bcryct.compare(password, dbPassword).then((match) => {
+        if (!match) {
+          req.flash("error", "Wrong username and password combination!");
+          res.redirect("/login");
+          // res
+          //   .status(400)
+          //   .json({ error: "Wrong Username and Password Combination!" });
+        } else {
+          const accessToken = createTokens(user);
+          res.cookie("access-token", accessToken, {
+            maxAge: 60 * 60 * 24 * 30 * 1000,
+            httpOnly: true,
+          });
+
+          // res.json("Logged In");
+          res.redirect("/");
+        }
+      });
+    }
   } else {
-    const dbPassword = user[0][0].password;
-
-    bcryct.compare(password, dbPassword).then((match) => {
-      if (!match) {
-        res
-          .status(400)
-          .json({ error: "Wrong Username and Password Combination!" });
-      } else {
-        const accessToken = createTokens(user);
-        res.cookie("access-token", accessToken, {
-          maxAge: 60 * 60 * 24 * 30 * 1000,
-          httpOnly: true,
-        });
-        res.json("Logged In");
-      }
-    });
+    res.redirect("/login");
   }
 };
 
+let logoutUser = (req, res) => {
+  res.cookie("access-token", "", {
+    maxAge: 1,
+  });
+  res.redirect("/");
+};
+
 let getProfile = (req, res) => {
-  res.json("profile");
+  res.json("Only after logging in will I see this line");
 };
 
 module.exports = {
@@ -207,7 +238,9 @@ module.exports = {
   handleUploadSingleFile,
   handleUploadMultipleFiles,
   getLoginPage,
+  getRegisterPage,
   registerUser,
   loginUser,
   getProfile,
+  logoutUser,
 };
