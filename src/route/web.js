@@ -15,7 +15,7 @@ const initWebRoute = (app) => {
   router.post("/delete-user", homeController.deleteUser);
   router.get("/get-edit-user/:userID", homeController.getEditUser);
   router.post("/post-edit-user", homeController.postEditUser);
-  router.get("/upload-file", homeController.getUploadFilePage);
+  router.get("/upload-file", validateToken, homeController.getUploadFilePage);
   router.get("/login", homeController.getLoginPage);
   router.get("/register", homeController.getRegisterPage);
   router.get("/profile", validateToken, homeController.getProfile);
